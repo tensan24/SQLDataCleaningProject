@@ -24,8 +24,7 @@ set SalesDateNew = CONVERT(date, SaleDate)
 
 
 
-
-
+	
 --Populate property Address data
 
 Select *
@@ -51,7 +50,6 @@ join PortfolioProject.dbo.NashvilleHousing b
 	ON a.ParcelID = b.ParcelID
 	AND a.[UniqueID ] <> b.[UniqueID ]
 where a.PropertyAddress is null
-
 
 
 
@@ -120,6 +118,8 @@ set OwnerSplitState = PARSENAME(REPLACE(OwnerAddress, ',', '.'),1)
 
 
 
+	
+
 -- Change Y and N to Yes and No in "Sold as Vacant" field
 
 Select distinct (Soldasvacant), Count(SoldAsVacant)
@@ -134,7 +134,6 @@ Select SoldAsVacant
 		End
 from PortfolioProject.dbo.NashvilleHousing
 
-
 Update NashvilleHousing
 Set SoldAsVacant = CASE when SoldAsVacant = 'Y' then 'Yes'
 		When SoldAsVacant = 'N' then 'No'
@@ -145,7 +144,8 @@ Set SoldAsVacant = CASE when SoldAsVacant = 'Y' then 'Yes'
 
 
 
---Remove Duplicates
+--Remove Duplicates using CTE
+	
 WITH RowNumCTE as(
 Select *,
 	ROW_NUMBER() over (
@@ -174,6 +174,7 @@ Where Row_num > 1
 
 
 
+	
 
 -- Delete Unused Column
 
